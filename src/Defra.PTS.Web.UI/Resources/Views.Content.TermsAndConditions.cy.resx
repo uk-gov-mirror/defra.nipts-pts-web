@@ -240,6 +240,15 @@
 	<data name="You can appeal if a PTD has not been approved, if a PTD has been cancelled or if you have been suspended from the Scheme." xml:space="preserve">
     <value>Cewch apelio os nad oes PTD wedi'i gymeradwyo, os oes PTD wedi'i ganslo neu os ydych chi wedi cael eich gwahardd o'r Cynllun.</value>
   </data>
+	<data name="Cancellation of Pet Travel Documents (PTDs)" xml:space="preserve">
+    <value>Canslo Dogfennau Teithio Anifeiliaid Anwes (PTDs)</value>
+  </data>
+	<data name="APHA reserves the right to refuse an application. It can also cancel a PTD (for example, following the death of a pet, if you have to change any details like your address, or for enforcement purposes in case you are in breach of the Scheme's requirements)." xml:space="preserve">
+    <value>Mae APHA yn cadw'r hawl i wrthod cais. Gall hefyd ganslo PTD (er enghraifft, ar ôl marwolaeth anifail anwes, os oes rhaid ichi newid unrhyw fanylion fel eich cyfeiriad, neu at ddibenion gorfodi rhag ofn eich bod yn torri gofynion y Cynllun).</value>
+  </data>
+	<data name="You can appeal if you have been suspended from the Scheme by contacting APHA to appeal the decision. If your PTD has been cancelled or was unsuccessful, you can contact APHA for more information." xml:space="preserve">
+    <value>Gallwch apelio os ydych chi wedi cael eich atal o'r Cynllun trwy gysylltu ag APHA i apelio yn erbyn y penderfyniad. Os yw'ch PTD wedi'i ganslo neu wedi bod yn aflwyddiannus, gallwch gysylltu ag APHA i gael rhagor o wybodaeth.</value>
+  </data>
 	<data name="You can contact APHA to appeal a decision." xml:space="preserve">
     <value>Gallwch gysylltu ag APHA i apelio yn erbyn penderfyniad.</value>
   </data>
