@@ -348,3 +348,5 @@ ASALocalRun/
 /src/Defra.Trade.EUCerts.UI.Vue/.config/dotnet-tools.json
 /src/Defra.PTS.Web.UI/package-lock.json
 /src/Defra.PTS.Web.UI/package.json
+
+**/appsettings.Development.json

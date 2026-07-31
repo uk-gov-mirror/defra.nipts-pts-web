@@ -70,7 +70,7 @@ public static class WebAppConstants
     {
         public const string GovUK = "https://www.gov.uk/";
         public const string BetaServiceFeedback = "https://defragroup.eu.qualtrics.com/jfe/form/SV_b95IAit5HqB53Wm#";
-        public const string PrivacyNotice = "https://www.gov.uk/government/publications/animal-and-plant-heath-agency-privacy-notices/pet-travel-scheme-privacy-notice";
+        public const string PrivacyNotice = "https://www.gov.uk/government/publications/animal-and-plant-health-agency-privacy-notices/northern-ireland-pet-travel-scheme-privacy-notice";
         public const string OpenGovernmentLicence = "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/";
         public const string CrownCopyright = "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/";
     }
