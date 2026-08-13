@@ -1,5 +1,4 @@
-﻿using Defra.PTS.Web.Application.Features.Lookups.Queries;
-using Defra.PTS.Web.Application.Services.Interfaces;
+﻿using Defra.PTS.Web.Application.Services.Interfaces;
 using Defra.PTS.Web.Domain.DTOs;
 using Defra.PTS.Web.Domain.Enums;
 using Defra.PTS.Web.Domain.Models;
@@ -44,7 +43,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _sut.Object.ControllerContext.HttpContext = mockHttpContext.Object;
         }
 
-        [Fact(Skip = "Needs fixes")]
+        [Fact]
         public async Task GetColoursView()
         {
             var petColours = new List<ColourDto>
@@ -54,10 +53,22 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             };
             var formData = new TravelDocumentViewModel
             {
+                PetKeeperUserDetails = new PetKeeperUserDetailsViewModel
+                {
+                    IsCompleted = true,
+                    PetOwnerDetailsRequired = false,
+                },
+                PetMicrochip = new PetMicrochipViewModel { IsCompleted = true },
+                PetMicrochipDate = new PetMicrochipDateViewModel { IsCompleted = true },
                 PetSpecies = new PetSpeciesViewModel
                 {
-                    PetSpecies = PetSpecies.Dog
-                }
+                    PetSpecies = PetSpecies.Dog,
+                    IsCompleted = true,
+                },
+                PetBreed = new PetBreedViewModel { IsCompleted = true },
+                PetName = new PetNameViewModel { IsCompleted = true },
+                PetGender = new PetGenderViewModel { IsCompleted = true },
+                PetAge = new PetAgeViewModel { IsCompleted = true },
             };
 
             _sut.Setup(x => x.IsApplicationInProgress())
@@ -66,12 +77,8 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _sut.Setup(x => x.GetFormData(false))
                 .Returns(formData);
 
-            _mockMediator.Setup(x => x.Send(It.IsAny<GetColoursQueryRequest>(), CancellationToken.None))
-                .ReturnsAsync(new Application.DTOs.Features.GetColoursQueryResponse
-                {
-                    Colours = petColours,
-                    PetType = PetSpecies.Dog
-                });
+            _mockSelectListLocaliser.Setup(x => x.GetPetColoursList(It.IsAny<PetSpecies>()))
+                .ReturnsAsync(petColours);
 
             _sut.Setup(x => x.SaveFormData(It.IsAny<PetColourViewModel>()))
                 .Verifiable();

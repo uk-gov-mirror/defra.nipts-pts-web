@@ -349,7 +349,7 @@ public class BaseTravelDocumentController : BaseController
 
                 using (var outputStream = new MemoryStream())
                 {
-                    pdfDocument.Save(outputStream);
+                    await pdfDocument.SaveAsync(outputStream);
                     outputStream.Position = 0;
                     return File(outputStream.ToArray(), response.MimeType, fileName);
                 }

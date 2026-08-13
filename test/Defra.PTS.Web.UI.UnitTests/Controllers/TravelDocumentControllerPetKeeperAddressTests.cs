@@ -53,14 +53,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void PetKeeperAddress_Returns_RedirectToAction_When_Application_NotInProgress()
+        public async Task PetKeeperAddress_Returns_RedirectToAction_When_Application_NotInProgress()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
                 .Returns(false);
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperAddress().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperAddress()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -70,7 +70,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         
 
         [Fact]
-        public void PetKeeperAddress_Returns_RedirectToAction_When_Page_Does_Not_Meet_PreConditions()
+        public async Task PetKeeperAddress_Returns_RedirectToAction_When_Page_Does_Not_Meet_PreConditions()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -100,7 +100,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperAddress().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperAddress()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);            
@@ -108,7 +108,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetKeeperAddress_Returns_ViewResult_When_Page_Meets_PreConditions_Redirect_PetKeeperPostcode()
+        public async Task PetKeeperAddress_Returns_ViewResult_When_Page_Meets_PreConditions_Redirect_PetKeeperPostcode()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -149,7 +149,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperAddress().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperAddress()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -157,7 +157,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetKeeperAddress_Returns_ViewResult_When_Page_Meets_PreConditions()
+        public async Task PetKeeperAddress_Returns_ViewResult_When_Page_Meets_PreConditions()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -212,7 +212,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperAddress().Result as ViewResult;
+            var result = (await _travelDocumentController.Object.PetKeeperAddress()) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
@@ -220,7 +220,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetKeeperAddress_WithValidModel_RedirectsToPetKeeperPhone()
+        public async Task PetKeeperAddress_WithValidModel_RedirectsToPetKeeperPhone()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -246,7 +246,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperAddress(formData.PetKeeperAddress).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperAddress(formData.PetKeeperAddress)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);

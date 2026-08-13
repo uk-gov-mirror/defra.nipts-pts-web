@@ -206,7 +206,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(null, formData.PetMicrochipDate.BirthDate);
+            Assert.Null(formData.PetMicrochipDate.BirthDate);
         }
 
         [Fact]

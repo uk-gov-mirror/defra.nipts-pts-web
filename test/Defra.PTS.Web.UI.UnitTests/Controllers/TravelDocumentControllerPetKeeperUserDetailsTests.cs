@@ -60,7 +60,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void PetKeeperUserDetails_Returns_RedirectToAction_When_Application_NotInProgress()
+        public async Task PetKeeperUserDetails_Returns_RedirectToAction_When_Application_NotInProgress()
         {
             // Arrange
             var tempData = new TempDataDictionary(Mock.Of<Microsoft.AspNetCore.Http.HttpContext>(), Mock.Of<ITempDataProvider>());
@@ -69,7 +69,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _travelDocumentController.Object.TempData = tempData;
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperUserDetails().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperUserDetails()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -77,7 +77,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetKeeperUserDetails_Returns_RedirectToAction_When_User_IsSuspended()
+        public async Task PetKeeperUserDetails_Returns_RedirectToAction_When_User_IsSuspended()
         {
             // Arrange
             var tempData = new TempDataDictionary(Mock.Of<Microsoft.AspNetCore.Http.HttpContext>(), Mock.Of<ITempDataProvider>());
@@ -87,7 +87,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _travelDocumentController.Object.TempData = tempData;
 
             // Act
-            var result = _travelDocumentController.Object.PetKeeperUserDetails().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetKeeperUserDetails()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -246,14 +246,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
             // Assert
             Assert.Equal(nameof(TravelDocumentController.PetMicrochip), result.ActionName);
-            Assert.True(!formData.PetKeeperName.IsCompleted);
+            Assert.False(formData.PetKeeperName.IsCompleted);
             Assert.NotNull(formData.PetKeeperName.Name);
-            Assert.True(!formData.PetKeeperPhone.IsCompleted);
+            Assert.False(formData.PetKeeperPhone.IsCompleted);
             Assert.NotNull(formData.PetKeeperPhone.Phone);
-            Assert.True(!formData.PetKeeperPostcode.IsCompleted);
+            Assert.False(formData.PetKeeperPostcode.IsCompleted);
             Assert.NotNull(formData.PetKeeperPostcode.Postcode);
-            Assert.True(!formData.PetKeeperAddress.IsCompleted);
-            Assert.True(!formData.PetKeeperAddressManual.IsCompleted);
+            Assert.False(formData.PetKeeperAddress.IsCompleted);
+            Assert.False(formData.PetKeeperAddressManual.IsCompleted);
         }
 
         [Fact]

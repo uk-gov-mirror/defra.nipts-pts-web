@@ -55,14 +55,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_Returns_RedirectToAction_When_Application_NotInProgress()
+        public async Task PetBreed_Returns_RedirectToAction_When_Application_NotInProgress()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
                 .Returns(false);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -70,7 +70,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_Returns_RedirectToAction_When_Page_Does_Not_Meet_PreConditions()
+        public async Task PetBreed_Returns_RedirectToAction_When_Page_Does_Not_Meet_PreConditions()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -102,7 +102,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -110,7 +110,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_Returns_ViewResult_When_Page_Meets_PreConditions_PetBreed_Not_Matching()
+        public async Task PetBreed_Returns_ViewResult_When_Page_Meets_PreConditions_PetBreed_Not_Matching()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -159,14 +159,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed().Result as ViewResult;
+            var result = (await _travelDocumentController.Object.PetBreed()) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
         }
 
         [Fact]
-        public void PetBreed_Returns_ViewResult_When_Page_Meets_PreConditions_PetBreed_Matching_With_Additional_Info()
+        public async Task PetBreed_Returns_ViewResult_When_Page_Meets_PreConditions_PetBreed_Matching_With_Additional_Info()
         {
             // Arrange
             _travelDocumentController.Setup(x => x.IsApplicationInProgress())
@@ -216,7 +216,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed().Result as ViewResult;
+            var result = (await _travelDocumentController.Object.PetBreed()) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
@@ -224,7 +224,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void PetBreed_Returns_ViewResult_With_Correctly_Ordered_BreedList_When_User_Is_Welsh()
+        public async Task PetBreed_Returns_ViewResult_With_Correctly_Ordered_BreedList_When_User_Is_Welsh()
         {
             // Arrange
             Thread.CurrentThread.CurrentCulture = new CultureInfo("cy-GB"); // Set culture to Welsh
@@ -277,7 +277,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed().Result as ViewResult;
+            var result = (await _travelDocumentController.Object.PetBreed()) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
@@ -285,7 +285,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void PetBreed_WithValidModel_If_BreedName_Matches_RedirectsToPetName()
+        public async Task PetBreed_WithValidModel_If_BreedName_Matches_RedirectsToPetName()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -335,7 +335,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -343,7 +343,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel_If_BreedName_Matches_RedirectsToPetName_Welsh()
+        public async Task PetBreed_WithValidModel_If_BreedName_Matches_RedirectsToPetName_Welsh()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("cy-GB"); // Set culture to Welsh
             // Arrange                                 
@@ -406,7 +406,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -414,7 +414,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel_If_BreedNameIsMissed_MatchesToId_RedirectsToPetName()
+        public async Task PetBreed_WithValidModel_If_BreedNameIsMissed_MatchesToId_RedirectsToPetName()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -464,7 +464,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -472,7 +472,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel_If_BreedName_Does_Not_Matches_RedirectsToPetName()
+        public async Task PetBreed_WithValidModel_If_BreedName_Does_Not_Matches_RedirectsToPetName()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -522,7 +522,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -531,7 +531,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel_BreedIdEquatlTo300_If_BreedName_Matches_RedirectsToPetName()
+        public async Task PetBreed_WithValidModel_BreedIdEquatlTo300_If_BreedName_Matches_RedirectsToPetName()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -581,7 +581,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -590,7 +590,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel_BreedIdEquatlTo300_If_BreedName_Matches_RedirectsToPetName_Welsh()
+        public async Task PetBreed_WithValidModel_BreedIdEquatlTo300_If_BreedName_Matches_RedirectsToPetName_Welsh()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("cy-GB"); // Set culture to Welsh
 
@@ -653,7 +653,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -662,7 +662,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void PetBreed_WithValidModel__BreedIdEquatlTo300_If_BreedName_Does_Not_Matches_RedirectsToPetName()
+        public async Task PetBreed_WithValidModel__BreedIdEquatlTo300_If_BreedName_Does_Not_Matches_RedirectsToPetName()
         {
             // Arrange                                 
             var formData = new TravelDocumentViewModel
@@ -712,7 +712,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                 .Returns(formData);
 
             // Act
-            var result = _travelDocumentController.Object.PetBreed(formData.PetBreed).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.PetBreed(formData.PetBreed)) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);

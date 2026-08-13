@@ -70,7 +70,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void ApplicationCertificate_Returns_RedirectTo_ApplicationDetails()
+        public async Task ApplicationCertificate_Returns_RedirectTo_ApplicationDetails()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -91,14 +91,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
             _travelDocumentController.Setup(x => x.CurrentUserId()).Returns(userId);
 
-            var result = _travelDocumentController.Object.ApplicationCertificate(applicationId).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.ApplicationCertificate(applicationId)) as RedirectToActionResult;
 
             Assert.NotNull(result);
             Assert.Equal(nameof(TravelDocumentController.ApplicationDetails), result.ActionName);
         }
 
         [Fact]
-        public void ApplicationCertificate_Returns_ViewResult()
+        public async Task ApplicationCertificate_Returns_ViewResult()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -120,14 +120,14 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
             _travelDocumentController.Setup(x => x.CurrentUserId()).Returns(userId);
 
-            var result = _travelDocumentController.Object.ApplicationCertificate(applicationId).Result as ViewResult;
+            var result = (await _travelDocumentController.Object.ApplicationCertificate(applicationId)) as ViewResult;
 
             Assert.NotNull(result);
         }
 
 
         [Fact]
-        public void ApplicationCertificate_Returns_Error()
+        public async Task ApplicationCertificate_Returns_Error()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -150,7 +150,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             // different UserId
             _travelDocumentController.Setup(x => x.CurrentUserId()).Returns(Guid.NewGuid());
 
-            var result = _travelDocumentController.Object.ApplicationCertificate(applicationId).Result as ViewResult;
+            var result = (await _travelDocumentController.Object.ApplicationCertificate(applicationId)) as ViewResult;
 
             Assert.Null(result);
         }
@@ -159,7 +159,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         [InlineData("404", "Not Found", System.Net.HttpStatusCode.NotFound)]
         [InlineData("500", "Internal Server Error", System.Net.HttpStatusCode.InternalServerError)]
         [InlineData("500", "unexpected Error", null)]
-        public void ApplicationCertificate_Returns_Error_Code(string expectedErrorCode, string errorMessage, HttpStatusCode? statusCode)
+        public async Task ApplicationCertificate_Returns_Error_Code(string expectedErrorCode, string errorMessage, HttpStatusCode? statusCode)
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -179,7 +179,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             // different UserId
             _travelDocumentController.Setup(x => x.CurrentUserId()).Returns(Guid.NewGuid());
 
-            var result = _travelDocumentController.Object.ApplicationCertificate(applicationId).Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Object.ApplicationCertificate(applicationId)) as RedirectToActionResult;
 
             Assert.NotNull(result);
             Assert.Equal("HandleError", result.ActionName);

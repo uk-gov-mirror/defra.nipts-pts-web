@@ -56,7 +56,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void If_MagicWordEnabled_True_RedirectTo_Index()
+        public async Task If_MagicWordEnabled_True_RedirectTo_Index()
         {
             // Arrange
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -101,7 +101,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _travelDocumentController.TempData = tempData;
 
             // Act
-            var result = _travelDocumentController.Index().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Index()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -109,7 +109,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
         [Fact]
-        public void If_ManagementLinkClicked_True_RedirectTo_CheckIdm2SignOut()
+        public async Task If_ManagementLinkClicked_True_RedirectTo_CheckIdm2SignOut()
         {
             // Arrange
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -154,7 +154,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             _travelDocumentController.TempData = tempData;
 
             // Act
-            var result = _travelDocumentController.Index().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Index()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
@@ -163,7 +163,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
         [Fact]
-        public void If_HasUserPassedPasswordCheck_True_Returns_View()
+        public async Task If_HasUserPassedPasswordCheck_True_Returns_View()
         {
             // Arrange
             var tempData = new TempDataDictionary(Mock.Of<Microsoft.AspNetCore.Http.HttpContext>(), Mock.Of<ITempDataProvider>());
@@ -182,7 +182,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
                  Applications = [new ApplicationSummaryDto { ApplicationId = Guid.NewGuid() }]
              });
             // Act
-            var result = _travelDocumentController.Index().Result as ViewResult;
+            var result = (await _travelDocumentController.Index()) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
@@ -192,7 +192,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         [InlineData("404", "Not Found", System.Net.HttpStatusCode.NotFound)]
         [InlineData("500", "Internal Server Error", System.Net.HttpStatusCode.InternalServerError)]
         [InlineData("500", "unexpected Error", null)]
-        public void If_HasUserPassedPasswordCheck_True_Returns_View_Error_Code(string expectedErrorCode, string errorMessage, HttpStatusCode? statusCode)
+        public async Task If_HasUserPassedPasswordCheck_True_Returns_View_Error_Code(string expectedErrorCode, string errorMessage, HttpStatusCode? statusCode)
         {
             // Arrange
             var tempData = new TempDataDictionary(Mock.Of<Microsoft.AspNetCore.Http.HttpContext>(), Mock.Of<ITempDataProvider>());
@@ -209,7 +209,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
               .ThrowsAsync(new HttpRequestException(errorMessage, null, statusCode));
 
             // Act
-            var result = _travelDocumentController.Index().Result as RedirectToActionResult;
+            var result = (await _travelDocumentController.Index()) as RedirectToActionResult;
 
             // Assert
             Assert.NotNull(result);
