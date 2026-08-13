@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Moq;
-using Xunit;
 
 namespace Defra.PTS.Web.UI.UnitTests.Extensions;
 

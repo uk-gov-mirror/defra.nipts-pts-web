@@ -8,7 +8,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Caching;
 using System.Security.Claims;

@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Localization;
 
 using System.Drawing.Drawing2D;

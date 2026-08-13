@@ -1,17 +1,14 @@
 ﻿using Defra.PTS.Web.Infrastructure.Services.Interfaces;
 using Moq;
-using NUnit.Framework;
 using Address = Defra.PTS.Web.Domain.Models.Address;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 {
-    [TestFixture]
     public class AddressLookupServiceTests
     {
         protected Mock<HttpMessageHandler> _mockHttpMessageHandler = new();
 
-        [Test]
+        [Fact]
         public void ConvertAddress_Return_Success()
         {
             var address = new Address
@@ -27,13 +24,13 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             var addressFromCsv = new Address(csv);
             var csvFromAdddress = address.ToCsvString();
 
-            Assert.AreEqual(address.AddressLineOne, addressFromCsv.AddressLineOne);
-            Assert.AreEqual(address.AddressLineTwo, addressFromCsv.AddressLineTwo);
-            Assert.AreEqual(address.County, addressFromCsv.County);
-            Assert.AreEqual(address.Postcode, addressFromCsv.Postcode);
-            Assert.AreEqual(address.TownOrCity, addressFromCsv.TownOrCity);
-            Assert.AreEqual(address.ToDisplayString(), addressFromCsv.ToDisplayString());
-            Assert.AreEqual(csvFromAdddress, csv);
+            Assert.Equal(address.AddressLineOne, addressFromCsv.AddressLineOne);
+            Assert.Equal(address.AddressLineTwo, addressFromCsv.AddressLineTwo);
+            Assert.Equal(address.County, addressFromCsv.County);
+            Assert.Equal(address.Postcode, addressFromCsv.Postcode);
+            Assert.Equal(address.TownOrCity, addressFromCsv.TownOrCity);
+            Assert.Equal(address.ToDisplayString(), addressFromCsv.ToDisplayString());
+            Assert.Equal(csvFromAdddress, csv);
         }
 
     }

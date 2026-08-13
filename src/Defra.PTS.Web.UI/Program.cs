@@ -2,6 +2,7 @@ using Defra.PTS.Web.Application.Extensions;
 using Defra.PTS.Web.CertificateGenerator.Extensions;
 using Defra.PTS.Web.Domain.Models;
 using Defra.PTS.Web.Infrastructure.Extensions;
+using Defra.PTS.Web.UI.Configuration;
 using Defra.PTS.Web.UI.Configuration.Startup;
 using Defra.PTS.Web.UI.Constants;
 using Defra.Trade.Common.Api.Health;
@@ -14,6 +15,9 @@ using System.Globalization;
 using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure PDFsharp font resolution (see PdfFontConfiguration for details).
+PdfFontConfiguration.Configure();
+
 builder.Services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 builder.Services.AddMvc()
         .AddViewLocalization(
@@ -21,7 +25,7 @@ builder.Services.AddMvc()
             opts => { opts.ResourcesPath = "Resources"; })
         .AddDataAnnotationsLocalization();
 
-builder.Configuration.ConfigureTradeAppConfiguration(true, "RemosSignUpService:Sentinel");
+builder.Configuration.ConfigureTradeAppConfiguration();
 
 builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 #if DEBUG

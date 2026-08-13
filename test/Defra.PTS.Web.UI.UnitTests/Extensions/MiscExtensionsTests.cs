@@ -7,7 +7,6 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
-using Xunit;
 
 namespace Defra.PTS.Web.UI.UnitTests.Extensions;
 

@@ -22,14 +22,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUglify.Helpers;
-using NUnit.Framework;
 using System.Security.Claims;
 using static Defra.PTS.Web.UI.Constants.WebAppConstants;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.UI.UnitTests.Controllers
 {
-    [TestFixture]
     public class TravelDocumentControllerDeclarationTests
     {
         private readonly Mock<IValidationService> _mockValidationService = new();
@@ -45,11 +42,6 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var options = Options.Create(new LocalizationOptions { ResourcesPath = "Resources" });
             var factory = new ResourceManagerStringLocalizerFactory(options, NullLoggerFactory.Instance);
             _localizer = new StringLocalizer<ISharedResource>(factory);
-        }
-
-        [SetUp]
-        public void Setup()
-        {
             // Arrange
             _travelDocumentController = new TravelDocumentController(_mockValidationService.Object, _mockMediator.Object, _mockLogger.Object, _mockPtsSettings.Object, _breedHelper.Object, _localizer);
             var mockHttpContext = new Mock<HttpContext>();
@@ -59,7 +51,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
 
-        [Test]
+        [Fact]
         public void Declaration_Get_ReturnsRedirectToPetKeeperUserDetails_WhenApplicationNotInProgress()
         {
             // Arrange
@@ -77,11 +69,11 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Declaration() as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.Index), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.Index), result.ActionName);
         }
 
-        [Test]
+        [Fact]
         public void Declaration_Get_ReturnsRedirectToPetKeeperUserDetails_WhenApplicationInProgress()
         {
             // Arrange
@@ -100,13 +92,13 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Declaration() as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(nameof(TravelDocumentController.PetKeeperUserDetails), result.ActionName);
+            Assert.NotNull(result);
+            Assert.NotNull(nameof(TravelDocumentController.PetKeeperUserDetails));
 
         }
 
 
-        [Test]
+        [Fact]
         public void Declaration_Get_ReturnsViewWithModel_WhenApplicationInProgress()
         {
             // Arrange
@@ -136,13 +128,13 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var model = result.Model as DeclarationViewModel;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(model);
+            Assert.NotNull(result);
+            Assert.NotNull(model);
 
         }
 
 
-        [Test]
+        [Fact]
         public async Task Declaration_Post_ReturnsViewWithModel_WhenModelStateIsInvalid()
         {
             // Arrange
@@ -179,12 +171,12 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var returnedModel = result.Model as DeclarationViewModel;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(returnedModel);
+            Assert.NotNull(result);
+            Assert.NotNull(returnedModel);
         }
 
 
-        [Test]
+        [Fact]
         public async Task Declaration_Post_ReturnsViewWithModel_WhenFormIsSubmittedModelStateIsvalid()
         {
             // Arrange
@@ -220,12 +212,12 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var returnedModel = result.Model as DeclarationViewModel;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsNotNull(returnedModel);
+            Assert.NotNull(result);
+            Assert.NotNull(returnedModel);
         }
 
 
-        [Test]
+        [Fact]
         public async Task Declaration_Post_ReturnsViewWithModel_WhenFormIsNotSubmittedModelStateIsvalidWithoutValidationError()
         {
             // Arrange
@@ -298,12 +290,12 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.Acknowledgement), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.Acknowledgement), result.ActionName);
         }
 
-        [Test]
-        public void Declaration_Post_Throws_Error_WhenFormIsNotSubmittedModelStateIsvalidWithoutValidationError()
+        [Fact]
+        public async Task Declaration_Post_Throws_Error_WhenFormIsNotSubmittedModelStateIsvalidWithoutValidationError()
         {
             // Arrange
             var expectedMessage = "Error Unexpected";
@@ -369,10 +361,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
 
             // Act
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _travelDocumentController.Declaration(model));
+            var ex = await Assert.ThrowsAsync<Exception>(async () => await _travelDocumentController.Declaration(model));
 
             Assert.NotNull(ex);
-            Assert.AreEqual(expectedMessage, ex.Message);         
+            Assert.Equal(expectedMessage, ex.Message);         
         }
 
         private static ITempDataDictionary TempData()

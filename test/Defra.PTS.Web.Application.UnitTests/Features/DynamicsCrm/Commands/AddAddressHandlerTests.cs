@@ -9,13 +9,11 @@ using Defra.PTS.Web.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Features.DynamicsCrm.Commands
 {
@@ -39,7 +37,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Features.DynamicsCrm.Commands
         }
 
         [Fact]
-        public void Handle_AddAddressRequest_ReturnsCustomException()
+        public async Task Handle_AddAddressRequest_ReturnsCustomException()
         {
             // Arrange
             var dynamicServiceMock = new Mock<IDynamicService>();
@@ -54,7 +52,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Features.DynamicsCrm.Commands
             var request = new AddAddressRequest(user);
 
             // Assert
-            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(request, CancellationToken.None));
+            await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(request, CancellationToken.None));
         }
     }
 }

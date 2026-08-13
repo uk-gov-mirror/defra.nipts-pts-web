@@ -17,23 +17,18 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Azure.Amqp.Transaction;
-using Microsoft.Azure.Management.ContainerRegistry.Fluent.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
-using NUnit.Framework;
 using System.Net;
 using System.Security.Claims;
 using Xunit;
 using Xunit.Sdk;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.UI.UnitTests.Controllers
 {
-    [TestFixture]
     public class TravelDocumentControllerTests
     {
         private readonly Mock<IValidationService> _mockValidationService = new();
@@ -51,11 +46,6 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var factory = new ResourceManagerStringLocalizerFactory(options, NullLoggerFactory.Instance);
             _localizer = new StringLocalizer<ISharedResource>(factory);
 
-        }
-
-        [SetUp]
-        public void Setup()
-        {
             var ptsSettings = new PtsSettings
             {
                 MagicWordEnabled = true,
@@ -65,7 +55,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
 
-        [Test]
+        [Fact]
         public void If_MagicWordEnabled_True_RedirectTo_Index()
         {
             // Arrange
@@ -114,11 +104,11 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Index().Result as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.Index), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.Index), result.ActionName);
         }
 
-        [Test]
+        [Fact]
         public void If_ManagementLinkClicked_True_RedirectTo_CheckIdm2SignOut()
         {
             // Arrange
@@ -167,12 +157,12 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Index().Result as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("CheckIdm2SignOut", result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal("CheckIdm2SignOut", result.ActionName);
         }
 
 
-        [Test]
+        [Fact]
         public void If_HasUserPassedPasswordCheck_True_Returns_View()
         {
             // Arrange
@@ -195,12 +185,13 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Index().Result as ViewResult;
 
             // Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [TestCase("404", "Not Found", System.Net.HttpStatusCode.NotFound)]
-        [TestCase("500", "Internal Server Error", System.Net.HttpStatusCode.InternalServerError)]
-        [TestCase("500", "unexpected Error", null)]
+        [Theory]
+        [InlineData("404", "Not Found", System.Net.HttpStatusCode.NotFound)]
+        [InlineData("500", "Internal Server Error", System.Net.HttpStatusCode.InternalServerError)]
+        [InlineData("500", "unexpected Error", null)]
         public void If_HasUserPassedPasswordCheck_True_Returns_View_Error_Code(string expectedErrorCode, string errorMessage, HttpStatusCode? statusCode)
         {
             // Arrange
@@ -222,12 +213,12 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.AreEqual("HandleError", result.ActionName);
-            Assert.AreEqual("Error", result.ControllerName);
-            Assert.AreEqual(expectedErrorCode, result.RouteValues.Values.FirstOrDefault().ToString());
+            Assert.Equal("HandleError", result.ActionName);
+            Assert.Equal("Error", result.ControllerName);
+            Assert.Equal(expectedErrorCode, result.RouteValues.Values.FirstOrDefault().ToString());
         }
 
-        [Test]
+        [Fact]
         public void ApplicationDetailRecord_WithValidModel_RedirectsTo_ApplicationCertificate()
         {
             //Arrange
@@ -237,10 +228,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.ApplicationDetailRecord("1", AppConstants.ApplicationStatus.APPROVED) as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.ApplicationCertificate), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.ApplicationCertificate), result.ActionName);
         }
-        [Test]
+        [Fact]
         public void ApplicationDetailRecord_WithValidModel_RedirectsTo_ApplicationDetails()
         {
             //Arrange
@@ -250,11 +241,11 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.ApplicationDetailRecord("1", AppConstants.ApplicationStatus.UNSUCCESSFUL) as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.ApplicationDetails), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.ApplicationDetails), result.ActionName);
         }
 
-        [Test]
+        [Fact]
         public void GetHttpContext_ShouldReturnHttpContext()
         {
             // Arrange
@@ -266,10 +257,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.GetHttpContext();
 
             // Assert
-            Assert.AreEqual(expectedHttpContext, result);
+            Assert.Equal(expectedHttpContext, result);
         }
 
-        [Test]
+        [Fact]
         public void CurrentUserContactId_WhenUserIsAuthenticated_ShouldReturnContactId()
         {
             // Arrange
@@ -291,10 +282,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.CurrentUserContactId();
 
             // Assert
-            Assert.AreEqual(expectedContactId, result);
+            Assert.Equal(expectedContactId, result);
         }
 
-        [Test]
+        [Fact]
         public void CurrentUserContactId_WhenUserIsNotAuthenticated_ShouldReturnEmptyGuid()
         {
             // Arrange
@@ -304,10 +295,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.CurrentUserContactId();
 
             // Assert
-            Assert.AreEqual(Guid.Empty, result);
+            Assert.Equal(Guid.Empty, result);
         }
 
-        [Test]
+        [Fact]
         public void GetCurrentUserInfo_WhenUserIsAuthenticated_ShouldReturnUserWithClaims()
         {
             // Arrange
@@ -339,15 +330,15 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.GetCurrentUserInfo();
 
             // Assert
-            Assert.AreEqual(expectedUser.ContactId, result.ContactId);
-            Assert.AreEqual(expectedUser.UniqueReference, result.UniqueReference);
-            Assert.AreEqual(expectedUser.FirstName, result.FirstName);
-            Assert.AreEqual(expectedUser.LastName, result.LastName);
-            Assert.AreEqual(expectedUser.EmailAddress, result.EmailAddress);
-            Assert.AreEqual(expectedUser.Role, result.Role);
+            Assert.Equal(expectedUser.ContactId, result.ContactId);
+            Assert.Equal(expectedUser.UniqueReference, result.UniqueReference);
+            Assert.Equal(expectedUser.FirstName, result.FirstName);
+            Assert.Equal(expectedUser.LastName, result.LastName);
+            Assert.Equal(expectedUser.EmailAddress, result.EmailAddress);
+            Assert.Equal(expectedUser.Role, result.Role);
         }
 
-        [Test]
+        [Fact]
         public void GetCurrentUserInfo_WhenUserIsNotAuthenticated_ShouldReturnEmptyUser()
         {
             // Arrange
@@ -357,7 +348,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.GetCurrentUserInfo();
 
             // Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
         private void MockHttpContext()

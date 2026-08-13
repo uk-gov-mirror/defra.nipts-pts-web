@@ -19,7 +19,6 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using Microsoft.Extensions.Localization;
-using Microsoft.Azure.Management.BatchAI.Fluent.Models;
 using Defra.PTS.Web.UI.Helpers;
 using Defra.PTS.Web.Domain.Enums;
 

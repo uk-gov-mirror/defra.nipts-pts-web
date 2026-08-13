@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Defra.PTS.Web.Application.UnitTests.Features.Users.Commands
@@ -51,11 +52,17 @@ namespace Defra.PTS.Web.Application.UnitTests.Features.Users.Commands
             var request = new UpdateUserRequest(emailAddress);
 
             // Act + Assert
-            var result = await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(request, CancellationToken.None));
-
-            //Assert
-            Assert.NotNull(result);
-            Assert.Equal(errorMessage, result.Message);
+            try
+            {
+                await handler.Handle(request, CancellationToken.None);
+                Assert.Fail("Expected exception was not thrown");
+            }
+            catch (Exception ex)
+            {
+                // Assert
+                Assert.NotNull(ex);
+                Assert.Equal(errorMessage, ex.Message);
+            }
 
         }
     }

@@ -6,13 +6,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
-using NUnit.Framework;
 using System.Net;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 {
-    [TestFixture]
     public class DynamicServiceTests
     {
         private DynamicService _systemUnderTest;
@@ -21,16 +18,15 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
         private Mock<ILogger<DynamicService>> _mockLogger;
         private Mock<IOptions<AppSettings>> _options;
 
-        [SetUp]
-        public void SetUp()
+        public DynamicServiceTests()
         {
             _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             _mockLogger = new Mock<ILogger<DynamicService>>();
             _options = new Mock<IOptions<AppSettings>>();
         }
 
-        [Test]
-        public void AddApplicationToQueueAsync_Exception()
+        [Fact]
+        public async Task AddApplicationToQueueAsync_Exception()
         {
             // Arrange
             var application = new ApplicationSubmittedMessage();
@@ -44,11 +40,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _systemUnderTest = new DynamicService(_options.Object, httpClientMock, _mockLogger.Object);
 
             // Act & Assert
-            Assert.ThrowsAsync<Exception>(() => _systemUnderTest.AddApplicationToQueueAsync(application));
+            await Assert.ThrowsAsync<Exception>(() => _systemUnderTest.AddApplicationToQueueAsync(application));
         }
 
 
-        [Test]
+        [Fact]
         public async Task AddApplicationToQueueAsync_Success()
         {
             // Arrange
@@ -72,7 +68,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
                    ItExpr.IsAny<CancellationToken>());
         }
 
-        [Test]
+        [Fact]
         public async Task AddAddressAsync_Success()
         {
             // Arrange
@@ -96,7 +92,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
                    ItExpr.IsAny<CancellationToken>());
         }
 
-        [Test]
+        [Fact]
         public async Task AddAddressAsync_Failure()
         {
             // Arrange
@@ -120,7 +116,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
                    ItExpr.IsAny<CancellationToken>());
         }
 
-        [Test]
+        [Fact]
         public async Task AddApplicationToQueueAsync_Failure()
         {
             // Arrange
@@ -144,8 +140,8 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
                    ItExpr.IsAny<CancellationToken>());
         }
 
-        [Test]
-        public void AddApplicationToQueueAsync_ThrowsException()
+        [Fact]
+        public async Task AddApplicationToQueueAsync_ThrowsException()
         {
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch details"));
@@ -160,7 +156,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _systemUnderTest = new DynamicService(_options.Object, httpClientMock, _mockLogger.Object);
 
             // Act
-            Assert.ThrowsAsync<Exception>(async () => await _systemUnderTest.AddApplicationToQueueAsync(application));
+            await Assert.ThrowsAsync<Exception>(async () => await _systemUnderTest.AddApplicationToQueueAsync(application));
         }
 
     }

@@ -9,22 +9,19 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
-using NUnit.Framework;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 {
-    [TestFixture]
     public class PetServiceTests
     {
         private PetService _sut;
         protected Mock<HttpMessageHandler> _mockHttpMessageHandler = new();
         private readonly Mock<ILogger<PetService>> _mockLogger = new();
 
-        [Test]
+        [Fact]
         public async Task GetBreeds_Return_200()
         {
             var breeds = new List<BreedDto> { new BreedDto() { BreedId = 1 } };
@@ -49,11 +46,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetBreeds(PetSpecies.Dog);
 
-            Assert.AreEqual(breeds[0].BreedId, actualResult[0].BreedId);
+            Assert.Equal(breeds[0].BreedId, actualResult[0].BreedId);
         }
 
-        [Test]
-        public void GetBreeds_ThrowsException()
+        [Fact]
+        public async Task GetBreeds_ThrowsException()
         {                       
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch breeds"));
@@ -65,10 +62,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new PetService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<Exception>(async () => await _sut.GetBreeds(PetSpecies.Dog));
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.GetBreeds(PetSpecies.Dog));
         }
 
-        [Test]
+        [Fact]
         public async Task GetColours_Return_200()
         {
             var colours = new List<ColourDto> { new ColourDto() { Id = "1", Name = "Brown" } };
@@ -93,11 +90,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetColours(PetSpecies.Dog);
 
-            Assert.AreEqual(colours[0].Id, actualResult[0].Id);
-            Assert.AreEqual(colours[0].Code, actualResult[0].Code);
+            Assert.Equal(colours[0].Id, actualResult[0].Id);
+            Assert.Equal(colours[0].Code, actualResult[0].Code);
         }
 
-        [Test]
+        [Fact]
         public async Task GetColours_TestToCode_Return_200()
         {
             var colours = new List<ColourDto> { new ColourDto() { Id = "1", Name = "" } };
@@ -122,12 +119,12 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetColours(PetSpecies.Dog);
 
-            Assert.AreEqual(colours[0].Id, actualResult[0].Id);
-            Assert.AreEqual(colours[0].Code, actualResult[0].Code);
+            Assert.Equal(colours[0].Id, actualResult[0].Id);
+            Assert.Equal(colours[0].Code, actualResult[0].Code);
         }
 
-        [Test]
-        public void GetColours_ThrowsException()
+        [Fact]
+        public async Task GetColours_ThrowsException()
         {            
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch colours"));
@@ -139,10 +136,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new PetService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<Exception>(async () => await _sut.GetColours(PetSpecies.Dog));
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.GetColours(PetSpecies.Dog));
         }
 
-        [Test]
+        [Fact]
         public async Task CreatePet_Return_Success()
         {
             var expectedResult = Guid.NewGuid();
@@ -167,11 +164,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.CreatePet(new TravelDocumentViewModel());
 
-            Assert.AreEqual(expectedResult, actualResult);
+            Assert.Equal(expectedResult, actualResult);
         }
 
-        [Test]
-        public void CreatePet_ThrowsException()
+        [Fact]
+        public async Task CreatePet_ThrowsException()
         {
             // Arrange
             var expectedMessage = "Error";
@@ -192,14 +189,14 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _sut = new PetService(_mockLogger.Object, httpClient);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(() => _sut.CreatePet(new TravelDocumentViewModel()));
+            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.CreatePet(new TravelDocumentViewModel()));
 
             Assert.NotNull(ex);
-            Assert.AreEqual(expectedMessage, ex.Message);
+            Assert.Equal(expectedMessage, ex.Message);
         }
 
-        [Test]
-        public void CreatePet_ThrowsHttpRequestException()
+        [Fact]
+        public async Task CreatePet_ThrowsHttpRequestException()
         {
             // Arrange
             var expectedMessage = "Unable to create pet, Status code: InternalServerError";
@@ -225,10 +222,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _sut = new PetService(_mockLogger.Object, httpClient);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<HttpRequestException>(() => _sut.CreatePet(new TravelDocumentViewModel()));
+            var ex = await Assert.ThrowsAsync<HttpRequestException>(() => _sut.CreatePet(new TravelDocumentViewModel()));
 
             Assert.NotNull(ex);
-            Assert.AreEqual(expectedMessage, ex.Message);
+            Assert.Equal(expectedMessage, ex.Message);
         }
     }
 }

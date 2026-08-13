@@ -3,7 +3,6 @@ using Defra.PTS.Web.Application.Constants;
 using Defra.PTS.Web.Application.DTOs.Services;
 using Defra.PTS.Web.Application.Mapping.Converters;
 using Defra.PTS.Web.Domain.Enums;
-using Microsoft.Azure.Management.ContainerRegistry.Fluent.Models;
 
 namespace Defra.PTS.Web.Application.Mapping;
 

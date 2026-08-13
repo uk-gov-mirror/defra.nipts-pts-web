@@ -14,7 +14,7 @@ public partial class TravelDocumentController : BaseTravelDocumentController
 
         var formSubmissionQueue = GetFormSubmissionQueue();
 
-        if(string.IsNullOrEmpty(applicationReference) && formSubmissionQueue.IsNullOrEmpty())
+        if (string.IsNullOrEmpty(applicationReference) && (formSubmissionQueue == null || !formSubmissionQueue.Any()))
         {
             return RedirectToAction("Index", "TravelDocument");
         }

@@ -15,9 +15,9 @@ namespace Defra.PTS.Web.Application.Extensions;
 [ExcludeFromCodeCoverage]
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper((Action<AutoMapper.IMapperConfigurationExpression>)null, typeof(Defra.PTS.Web.Application.Mapping.ApplicationCertificateProfile));
 
         services.AddScoped<IPetService, PetService>();
         services.AddScoped<IApplicationService, ApplicationService>();

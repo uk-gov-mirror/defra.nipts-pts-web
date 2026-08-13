@@ -7,22 +7,19 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
-using NUnit.Framework;
 using System.Net;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 {
-    [TestFixture]
     public class UserServiceTests
     {
         private UserService _sut;
         protected Mock<HttpMessageHandler> _mockHttpMessageHandler = new();
         private readonly Mock<ILogger<UserService>> _mockLogger = new();
 
-        [Test]
+        [Fact]
         public async Task AddUser_Return_Success()
         {
             var user = new User 
@@ -58,10 +55,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.AddUserAsync(user);
 
-            Assert.AreEqual(expectedUserId, actualResult);
+            Assert.Equal(expectedUserId, actualResult);
         }
 
-        [Test]
+        [Fact]
         public async Task AddAddress_Return_Success()
         {
             var travelDocumentViewModel = new TravelDocumentViewModel
@@ -95,11 +92,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.AddAddressAsync(Domain.Enums.AddressType.Owner, travelDocumentViewModel);
 
-            Assert.AreEqual(expectedUserId, actualResult);
+            Assert.Equal(expectedUserId, actualResult);
         }
 
-        [Test]
-        public void AddAddress_Return_Failure()
+        [Fact]
+        public async Task AddAddress_Return_Failure()
         {
             var travelDocumentViewModel = new TravelDocumentViewModel
             {
@@ -130,11 +127,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddAddressAsync(Domain.Enums.AddressType.Owner, travelDocumentViewModel));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddAddressAsync(Domain.Enums.AddressType.Owner, travelDocumentViewModel));
         }
 
-        [Test]
-        public void AddUser_BadRequest_ThrowsException()
+        [Fact]
+        public async Task AddUser_BadRequest_ThrowsException()
         {
             var user = new User
             {
@@ -168,11 +165,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddUserAsync(user));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddUserAsync(user));
         }
 
-        [Test]
-        public void AddUser_ThrowsException()
+        [Fact]
+        public async Task AddUser_ThrowsException()
         {
             var user = new User
             {
@@ -195,10 +192,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddUserAsync(user));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddUserAsync(user));
         }
 
-        [Test]
+        [Fact]
         public async Task AddOwner_Return_Success()
         {
             var user = new User
@@ -251,11 +248,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.AddOwnerAsync(user, travelDocument);
 
-            Assert.AreEqual(expectedOwnerId, actualResult);
+            Assert.Equal(expectedOwnerId, actualResult);
         }
 
-        [Test]
-        public void AddOwner_BadRequest_ThrowsException()
+        [Fact]
+        public async Task AddOwner_BadRequest_ThrowsException()
         {
             var user = new User
             {
@@ -305,11 +302,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddOwnerAsync(user, travelDocument));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddOwnerAsync(user, travelDocument));
         }
 
-        [Test]
-        public void AddOwner_ThrowsException()
+        [Fact]
+        public async Task AddOwner_ThrowsException()
         {
             var user = new User
             {
@@ -344,10 +341,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddOwnerAsync(user, travelDocument));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.AddOwnerAsync(user, travelDocument));
         }
 
-        [Test]
+        [Fact]
         public async Task UpdateUser_Return_Success()
         {
             var expectedOwnerId = Guid.NewGuid();
@@ -373,11 +370,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.UpdateUserAsync("test@email.com");
 
-            Assert.AreEqual(expectedOwnerId, actualResult);
+            Assert.Equal(expectedOwnerId, actualResult);
         }
 
-        [Test]
-        public void UpdateUser_BadRequest_ThrowsException()
+        [Fact]
+        public async Task UpdateUser_BadRequest_ThrowsException()
         {
             var expectedOwnerId = Guid.NewGuid();
 
@@ -400,11 +397,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAsync("test@email.com"));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAsync("test@email.com"));
         }
 
-        [Test]
-        public void UpdateUser_ThrowsException()
+        [Fact]
+        public async Task UpdateUser_ThrowsException()
         {
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new HttpRequestException("Error"));
@@ -416,10 +413,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAsync("test@email.com"));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAsync("test@email.com"));
         }
 
-        [Test]
+        [Fact]
         public async Task UpdateAddress_Return_Success()
         {
             var expectedOwnerId = Guid.NewGuid();
@@ -445,11 +442,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.UpdateUserAddressAsync("test@email.com", expectedOwnerId);
 
-            Assert.AreEqual(expectedOwnerId, actualResult);
+            Assert.Equal(expectedOwnerId, actualResult);
         }
 
-        [Test]
-        public void UpdateAddress_BadRequest_ThrowsException()
+        [Fact]
+        public async Task UpdateAddress_BadRequest_ThrowsException()
         {
             var expectedOwnerId = Guid.NewGuid();
 
@@ -472,11 +469,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAddressAsync("test@email.com", expectedOwnerId));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAddressAsync("test@email.com", expectedOwnerId));
         }
 
-        [Test]
-        public void UpdateAddress_ThrowsException()
+        [Fact]
+        public async Task UpdateAddress_ThrowsException()
         {
             var expectedOwnerId = Guid.NewGuid();
 
@@ -490,10 +487,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAddressAsync("test@email.com", expectedOwnerId));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.UpdateUserAddressAsync("test@email.com", expectedOwnerId));
         }
 
-        [Test]
+        [Fact]
         public async Task GetUserDetail_Return_Success()
         {
             var expectedUserId = Guid.NewGuid();
@@ -525,11 +522,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetUserDetail(expectedUserId);
 
-            Assert.AreEqual(userDetail.FullName, actualResult.FullName);
+            Assert.Equal(userDetail.FullName, actualResult.FullName);
         }
 
-        [Test]
-        public void GetUserDetail_Throws_Exception()
+        [Fact]
+        public async Task GetUserDetail_Throws_Exception()
         {
             var expectedUserId = Guid.NewGuid();
 
@@ -558,7 +555,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new UserService(_mockLogger.Object, httpClient);
 
-            Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.GetUserDetail(expectedUserId));
+            await Assert.ThrowsAsync<HttpRequestException>(async () => await _sut.GetUserDetail(expectedUserId));
         }
 
     }

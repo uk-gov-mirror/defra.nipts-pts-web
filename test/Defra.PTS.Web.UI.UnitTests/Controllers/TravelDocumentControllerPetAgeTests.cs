@@ -15,12 +15,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
-using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.UI.UnitTests.Controllers
 {
-    [TestFixture]
     public class TravelDocumentControllerPetAgeTests
     {
         private readonly Mock<IValidationService> _mockValidationService = new();
@@ -38,11 +35,6 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var factory = new ResourceManagerStringLocalizerFactory(options, NullLoggerFactory.Instance);
             _localizer = new StringLocalizer<ISharedResource>(factory);
 
-        }
-
-        [SetUp]
-        public void Setup()
-        {
             // Arrange
             var tempData = new TempDataDictionary(Mock.Of<Microsoft.AspNetCore.Http.HttpContext>(), Mock.Of<ITempDataProvider>());              
             _travelDocumentController = new Mock<TravelDocumentController>(_mockValidationService.Object, _mockMediator.Object, _mockLogger.Object, _mockPtsSettings.Object, _mockBreedHelper.Object, _localizer)
@@ -60,7 +52,7 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
         }
 
 
-        [Test]
+        [Fact]
         public void PetAge_Returns_RedirectToAction_When_Application_NotInProgress()
         {
             // Arrange
@@ -71,13 +63,13 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Object.PetAge() as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.Index), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.Index), result.ActionName);
         }
 
         
 
-        [Test]
+        [Fact]
         public void PetAge_Returns_RedirectToAction_When_Page_Does_Not_Meet_PreConditions()
         {
             // Arrange
@@ -124,11 +116,11 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Object.PetAge() as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);            
+            Assert.NotNull(result);            
 
         }
 
-        [Test]
+        [Fact]
         public void PetAge_Returns_ViewResult_When_Page_Meets_PreConditions()
         {
             // Arrange
@@ -175,10 +167,10 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Object.PetAge() as ViewResult;
 
             // Assert
-            Assert.IsNotNull(result);
+            Assert.NotNull(result);
         }
 
-        [Test]
+        [Fact]
         public void PetAge_WithValidModel_RedirectsToPetColour()
         {
             // Arrange                                 
@@ -218,8 +210,8 @@ namespace Defra.PTS.Web.UI.UnitTests.Controllers
             var result = _travelDocumentController.Object.PetAge(formData.PetAge) as RedirectToActionResult;
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nameof(TravelDocumentController.PetColour), result.ActionName);
+            Assert.NotNull(result);
+            Assert.Equal(nameof(TravelDocumentController.PetColour), result.ActionName);
         }
 
 

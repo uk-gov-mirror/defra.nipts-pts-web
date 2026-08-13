@@ -11,13 +11,11 @@ using Defra.PTS.Web.Infrastructure.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assert = NUnit.Framework.Assert;
 
 namespace Defra.PTS.Web.Application.UnitTests.Features.Address.Queries
 {
@@ -40,7 +38,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Features.Address.Queries
         }
 
         [Fact]
-        public void Handle_AddressLookupHandler_ReturnsCustomException()
+        public async Task Handle_AddressLookupHandler_ReturnsCustomException()
         {
             // Arrange
             var adressLookupServiceMock = new Mock<IAddressLookupService>();
@@ -52,7 +50,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Features.Address.Queries
             var request = new AddressLookupRequest("");
 
             // Assert
-            Assert.ThrowsAsync<Exception>(async () => await handler.Handle(request, CancellationToken.None));
+            await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(request, CancellationToken.None));
         }
     }
 }

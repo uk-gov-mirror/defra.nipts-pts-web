@@ -2,17 +2,14 @@
 using Defra.PTS.Web.Application.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NUnit.Framework;
 using System.Text;
 using Moq.Protected;
 using Newtonsoft.Json;
 using System.Net;
 using Defra.PTS.Web.Application.DTOs.Services;
-using Assert = NUnit.Framework.Assert;
 using AutoMapper;
 using Defra.Trade.Address.V1.ApiClient.Model;
 using static System.Net.Mime.MediaTypeNames;
-using Microsoft.Azure.Management.Compute.Fluent.Models;
 using Defra.PTS.Web.Application.Mapping;
 using Microsoft.Extensions.DependencyInjection;
 using Defra.PTS.Web.Application.Mapping.Converters;
@@ -21,7 +18,6 @@ using Defra.PTS.Web.QRCoder.Services;
 
 namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 {
-    [TestFixture]
     public class ApplicationServiceTests
     {
         private ApplicationService _sut;
@@ -29,7 +25,7 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
         private readonly Mock<IMapper> _mapper = new();
         private readonly Mock<ILogger<ApplicationService>> _mockLogger = new();
 
-        [Test]
+        [Fact]
         public async Task CreateApplication_Return_Success()
         {
             var expectedResult = new ApplicationDto {  Id = Guid.NewGuid() };
@@ -54,12 +50,12 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.CreateApplication(new ApplicationDto());
 
-            Assert.AreEqual(expectedResult.Id, actualResult.Id);
+            Assert.Equal(expectedResult.Id, actualResult.Id);
         }
 
 
-        [Test]
-        public void CreateApplication_ThrowsException()
+        [Fact]
+        public async Task CreateApplication_ThrowsException()
         {
             // Arrange
             var expectedMessage = "Error";
@@ -80,14 +76,14 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _sut = new ApplicationService(_mockLogger.Object, httpClient, _mapper.Object);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<Exception>(() => _sut.CreateApplication(new ApplicationDto()));
+            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.CreateApplication(new ApplicationDto()));
 
             Assert.NotNull(ex);
-            Assert.AreEqual(expectedMessage, ex.Message);
+            Assert.Equal(expectedMessage, ex.Message);
         }
 
-        [Test]
-        public void CreateApplication_ThrowsHttpRequestException()
+        [Fact]
+        public async Task CreateApplication_ThrowsHttpRequestException()
         {
             // Arrange
             var expectedMessage = "Unable to create application, Status code: InternalServerError";
@@ -113,13 +109,13 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
             _sut = new ApplicationService(_mockLogger.Object, httpClient, _mapper.Object);
 
             // Act & Assert
-            var ex = Assert.ThrowsAsync<HttpRequestException>(() => _sut.CreateApplication(new ApplicationDto()));
+            var ex = await Assert.ThrowsAsync<HttpRequestException>(() => _sut.CreateApplication(new ApplicationDto()));
 
             Assert.NotNull(ex);
-            Assert.AreEqual(expectedMessage, ex.Message);
+            Assert.Equal(expectedMessage, ex.Message);
         }
 
-        [Test]
+        [Fact]
         public async Task GetApplicationCertificate_Return_200()
         {
             IMapper mapper = GetMapper();
@@ -162,10 +158,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetApplicationCertificate(Guid.NewGuid());
 
-            Assert.AreEqual(applicationCertificate.DocumentReferenceNumber, actualResult.CertificateIssued.DocumentReferenceNumber);
+            Assert.Equal(applicationCertificate.DocumentReferenceNumber, actualResult.CertificateIssued.DocumentReferenceNumber);
         }
 
-        [Test]
+        [Fact]
         public async Task GetApplicationDetails_Return_200()
         {
             IMapper mapper = GetMapper();
@@ -196,11 +192,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetApplicationDetails(Guid.NewGuid());
 
-            Assert.AreEqual(applicationDetails.MicrochipNumber, actualResult.MicrochipInformation.MicrochipNumber);
+            Assert.Equal(applicationDetails.MicrochipNumber, actualResult.MicrochipInformation.MicrochipNumber);
         }
 
-        [Test]
-        public void GetApplicationDetails_ThrowsException()
+        [Fact]
+        public async Task GetApplicationDetails_ThrowsException()
         {
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch details"));
@@ -212,11 +208,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new ApplicationService(_mockLogger.Object, httpClient, _mapper.Object);
 
-            Assert.ThrowsAsync<Exception>(async () => await _sut.GetApplicationDetails(Guid.NewGuid()));
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.GetApplicationDetails(Guid.NewGuid()));
         }
 
-        [Test]
-        public void GetApplicationCertificates_ThrowsException()
+        [Fact]
+        public async Task GetApplicationCertificates_ThrowsException()
         {
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch certificates"));
@@ -228,10 +224,10 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new ApplicationService(_mockLogger.Object, httpClient, _mapper.Object);
 
-            Assert.ThrowsAsync<Exception>(async () => await _sut.GetApplicationCertificate(Guid.NewGuid()));
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.GetApplicationCertificate(Guid.NewGuid()));
         }
 
-        [Test]
+        [Fact]
         public async Task GetApplications_Return_200()
         {
             var applications = new List<ApplicationSummaryDto> { new() { ApplicationId = Guid.NewGuid() } };
@@ -256,11 +252,11 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             var actualResult = await _sut.GetUserApplications(userId: Guid.NewGuid());
 
-            Assert.AreEqual(applications[0].ApplicationId, actualResult[0].ApplicationId);
+            Assert.Equal(applications[0].ApplicationId, actualResult[0].ApplicationId);
         }
 
-        [Test]
-        public void GetApplications_ThrowsException()
+        [Fact]
+        public async Task GetApplications_ThrowsException()
         {
             _mockHttpMessageHandler.Protected().Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ThrowsAsync(new Exception("Unable to fetch breeds"));
@@ -272,14 +268,15 @@ namespace Defra.PTS.Web.Application.UnitTests.Services.Services
 
             _sut = new ApplicationService(_mockLogger.Object, httpClient, _mapper.Object);
 
-            Assert.ThrowsAsync<Exception>(async () => await _sut.GetUserApplications(userId: Guid.NewGuid()));
+            await Assert.ThrowsAsync<Exception>(async () => await _sut.GetUserApplications(userId: Guid.NewGuid()));
         }
 
         private static IMapper GetMapper()
         {
             var services = new ServiceCollection();
+            services.AddLogging();
             services.AddScoped<IQRCodeService, QRCodeService>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper((Action<AutoMapper.IMapperConfigurationExpression>)null, typeof(Defra.PTS.Web.Application.Mapping.ApplicationCertificateProfile));
             var serviceProvider = services.BuildServiceProvider();
             return serviceProvider.GetService<IMapper>();
         }
