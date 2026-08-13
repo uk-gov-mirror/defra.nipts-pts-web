@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
     {
         var authService = provider.GetService<IAuthenticationService>();
         var apimInternalApisSettings = provider.GetRequiredService<IOptionsSnapshot<ApimInternalSettings>>().Value;
-        var authToken = authService!.GetAuthenticationHeaderAsync().Result.ToString();
+        var authToken = authService.GetAuthenticationHeaderAsync().Result.ToString();
         var config = new Configuration
         {
             BasePath = configuration.GetValue<string>("AddressApi:BaseUrl"),

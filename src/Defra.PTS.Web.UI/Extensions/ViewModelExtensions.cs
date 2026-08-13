@@ -8,15 +8,20 @@ public static class ViewModelExtensions
 {
     public static bool DoesPageMeetPreConditions(this TravelDocumentViewModel vm, TravelDocumentFormPageType formPage, out string actionName)
     {
-        var addressPages = new List<TravelDocumentFormPageType>
-        {
-            TravelDocumentFormPageType.PetKeeperPostcode,
-            TravelDocumentFormPageType.PetKeeperAddress,
-            TravelDocumentFormPageType.PetKeeperAddressManual
-        };
-
         actionName = string.Empty;
 
+        var keeperResult = CheckKeeperPreConditions(vm, formPage, ref actionName);
+        if (keeperResult.HasValue)
+        {
+            return keeperResult.Value;
+        }
+
+        return CheckPetDetailPreConditions(vm, formPage, ref actionName);
+    }
+
+    // Returns true/false when a keeper page resolves the outcome, or null to continue to the pet detail pages.
+    private static bool? CheckKeeperPreConditions(TravelDocumentViewModel vm, TravelDocumentFormPageType formPage, ref string actionName)
+    {
         // PetKeeperUserDetails
         if (formPage == TravelDocumentFormPageType.PetKeeperUserDetails)
         {
@@ -41,42 +46,10 @@ public static class ViewModelExtensions
             return false;
         }
 
-        // Address
-        if (addressPages.Contains(formPage))
+        var addressResult = CheckAddressPreConditions(vm, formPage, ref actionName);
+        if (addressResult.HasValue)
         {
-            if (!vm.PetKeeperUserDetails.PetOwnerDetailsRequired)
-            {
-                return true;
-            }
-
-            switch (formPage)
-            {
-                case TravelDocumentFormPageType.PetKeeperPostcode:
-                case TravelDocumentFormPageType.PetKeeperAddressManual:
-                    return true;
-                case TravelDocumentFormPageType.PetKeeperAddress:
-                    {
-                        if (!vm.PetKeeperPostcode.IsCompleted)
-                        {
-                            actionName = "PetKeeperPostcode";
-                            return false;
-                        }
-
-                        return true;
-                    }
-            }
-        }
-
-        // Select Address or Manual Address
-        if (vm.PetKeeperUserDetails.PetOwnerDetailsRequired)
-        {
-            var addressCompleted = vm.PetKeeperPostcode.IsCompleted && vm.PetKeeperAddress.IsCompleted;
-            var manualAddressCompleted = vm.PetKeeperAddressManual.IsCompleted;
-            if (!(addressCompleted || manualAddressCompleted))
-            {
-                actionName = "PetKeeperPostcode";
-                return false;
-            }
+            return addressResult.Value;
         }
 
         // PetKeeperPhone
@@ -91,139 +64,84 @@ public static class ViewModelExtensions
             return false;
         }
 
-        // B1: PetMicrochip
-        if (formPage == TravelDocumentFormPageType.PetMicrochip)
-        {
-            return true;
-        }
+        return null;
+    }
 
-        if (!vm.PetMicrochip.IsCompleted)
+    // Returns true/false when an address page resolves the outcome, or null to continue.
+    private static bool? CheckAddressPreConditions(TravelDocumentViewModel vm, TravelDocumentFormPageType formPage, ref string actionName)
+    {
+        var addressPages = new List<TravelDocumentFormPageType>
         {
-            actionName = "PetMicrochip";
-            return false;
-        }
+            TravelDocumentFormPageType.PetKeeperPostcode,
+            TravelDocumentFormPageType.PetKeeperAddress,
+            TravelDocumentFormPageType.PetKeeperAddressManual
+        };
 
-        // B1.1: PetMicrochipNotAvailable
-        if (formPage == TravelDocumentFormPageType.PetMicrochipNotAvailable)
+        if (addressPages.Contains(formPage))
         {
-            return true;
-        }
-
-        // B2: PetMicrochipDate
-        if (formPage == TravelDocumentFormPageType.PetMicrochipDate)
-        {
-            return true;
-        }
-
-        if (!vm.PetMicrochipDate.IsCompleted)
-        {
-            actionName = "PetMicrochipDate";
-            return false;
-        }
-
-        // B3: PetSpecies
-        if (formPage == TravelDocumentFormPageType.PetSpecies)
-        {
-            return true;
-        }
-
-        if (!vm.PetSpecies.IsCompleted)
-        {
-            actionName = "PetSpecies";
-            return false;
-        }
-
-        // B3.1: PetBreed
-        if (vm.PetSpecies.PetSpecies.HasBreed())
-        {
-            if (formPage == TravelDocumentFormPageType.PetBreed)
+            if (!vm.PetKeeperUserDetails.PetOwnerDetailsRequired)
             {
                 return true;
             }
 
-            if (!vm.PetBreed.IsCompleted)
+            if (formPage == TravelDocumentFormPageType.PetKeeperAddress && !vm.PetKeeperPostcode.IsCompleted)
             {
-                actionName = "PetBreed";
+                actionName = "PetKeeperPostcode";
+                return false;
+            }
+
+            return true;
+        }
+
+        // Select Address or Manual Address must be completed before continuing to later pages.
+        if (vm.PetKeeperUserDetails.PetOwnerDetailsRequired)
+        {
+            var addressCompleted = vm.PetKeeperPostcode.IsCompleted && vm.PetKeeperAddress.IsCompleted;
+            var manualAddressCompleted = vm.PetKeeperAddressManual.IsCompleted;
+            if (!(addressCompleted || manualAddressCompleted))
+            {
+                actionName = "PetKeeperPostcode";
                 return false;
             }
         }
 
-        // B4: PetName
-        if (formPage == TravelDocumentFormPageType.PetName)
+        return null;
+    }
+
+    private static bool CheckPetDetailPreConditions(TravelDocumentViewModel vm, TravelDocumentFormPageType formPage, ref string actionName)
+    {
+        var gates = new List<(TravelDocumentFormPageType Page, bool Completed, string Action)>
         {
-            return true;
+            (TravelDocumentFormPageType.PetMicrochip, vm.PetMicrochip.IsCompleted, "PetMicrochip"),
+            (TravelDocumentFormPageType.PetMicrochipNotAvailable, true, string.Empty),
+            (TravelDocumentFormPageType.PetMicrochipDate, vm.PetMicrochipDate.IsCompleted, "PetMicrochipDate"),
+            (TravelDocumentFormPageType.PetSpecies, vm.PetSpecies.IsCompleted, "PetSpecies"),
+        };
+
+        if (vm.PetSpecies.PetSpecies.HasBreed())
+        {
+            gates.Add((TravelDocumentFormPageType.PetBreed, vm.PetBreed.IsCompleted, "PetBreed"));
         }
 
-        if (!vm.PetName.IsCompleted)
-        {
-            actionName = "PetName";
-            return false;
-        }
+        gates.Add((TravelDocumentFormPageType.PetName, vm.PetName.IsCompleted, "PetName"));
+        gates.Add((TravelDocumentFormPageType.PetGender, vm.PetGender.IsCompleted, "PetGender"));
+        gates.Add((TravelDocumentFormPageType.PetAge, vm.PetAge.IsCompleted, "PetAge"));
+        gates.Add((TravelDocumentFormPageType.PetColour, vm.PetColour.IsCompleted, "PetColour"));
+        gates.Add((TravelDocumentFormPageType.PetFeature, vm.PetFeature.IsCompleted, "PetFeature"));
+        gates.Add((TravelDocumentFormPageType.Declaration, vm.Declaration.IsCompleted, "Declaration"));
 
-        // B5: PetGender
-        if (formPage == TravelDocumentFormPageType.PetGender)
+        foreach (var gate in gates)
         {
-            return true;
-        }
+            if (formPage == gate.Page)
+            {
+                return true;
+            }
 
-        if (!vm.PetGender.IsCompleted)
-        {
-            actionName = "PetGender";
-            return false;
-        }
-
-        // B6: PetAge
-        if (formPage == TravelDocumentFormPageType.PetAge)
-        {
-            return true;
-        }
-
-        if (!vm.PetAge.IsCompleted)
-        {
-            actionName = "PetAge";
-            return false;
-        }
-
-        // B7: PetColour
-        if (formPage == TravelDocumentFormPageType.PetColour)
-        {
-            return true;
-        }
-
-        if (!vm.PetColour.IsCompleted)
-        {
-            actionName = "PetColour";
-            return false;
-        }
-
-        // B8: PetFeature
-        if (formPage == TravelDocumentFormPageType.PetFeature)
-        {
-            return true;
-        }
-
-        if (!vm.PetFeature.IsCompleted)
-        {
-            actionName = "PetFeature";
-            return false;
-        }
-
-        // B9: Declaration
-        if (formPage == TravelDocumentFormPageType.Declaration)
-        {
-            return true;
-        }
-
-        if (!vm.Declaration.IsCompleted)
-        {
-            actionName = "Declaration";
-            return false;
-        }
-
-        // B10: Acknowledgement
-        if (formPage == TravelDocumentFormPageType.Acknowledgement)
-        {
-            return true;
+            if (!gate.Completed)
+            {
+                actionName = gate.Action;
+                return false;
+            }
         }
 
         return true;

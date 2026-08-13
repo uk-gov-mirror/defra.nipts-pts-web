@@ -31,6 +31,6 @@ public class CompositePdfModelRenderer : IPdfModelRenderer
     {
         ArgumentNullException.ThrowIfNull(model);
         var method = renderAsyncMethod.MakeGenericMethod(model.GetType());
-        return (Task<RenderResult<Stream>>)method.Invoke(this, new object[] { model, cancellationToken })!;
+        return (Task<RenderResult<Stream>>)method.Invoke(this, new object[] { model, cancellationToken });
     }
 }

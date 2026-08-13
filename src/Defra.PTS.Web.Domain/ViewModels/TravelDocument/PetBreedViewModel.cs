@@ -14,7 +14,7 @@ public class PetBreedViewModel : TravelDocumentFormPage
     public int BreedId { get; set; }
     public string BreedAdditionalInfo { get; set; }
 
-    public string PetTypeNameLowered => Enum.GetName(typeof(PetSpecies), PetSpecies).ToLower();
+    public string PetTypeNameLowered => Enum.GetName(PetSpecies).ToLower();
 
     public override Enums.TravelDocumentFormPageType PageType => Enums.TravelDocumentFormPageType.PetBreed;
 

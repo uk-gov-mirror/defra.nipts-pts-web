@@ -30,6 +30,6 @@ public class CompositeHtmlModelRenderer : IHtmlModelRenderer
     {
         ArgumentNullException.ThrowIfNull(model);
         var method = renderAsyncMethod.MakeGenericMethod(model.GetType());
-        return (Task<RenderResult<string>>)method.Invoke(this, new object[] { model, cancellationToken })!;
+        return (Task<RenderResult<string>>)method.Invoke(this, new object[] { model, cancellationToken });
     }
 }

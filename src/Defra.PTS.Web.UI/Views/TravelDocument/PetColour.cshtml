@@ -52,7 +52,7 @@
                                 if(petColour.Code != sharedlocalizer["Other"])
                                 {
                                     <div class="govuk-radios__item">
-                                        <input class="govuk-radios__input" type="radio" id=@petColour.Code asp-for="PetColour" value="@petColour.Id" onclick="clearInput()">
+                                        <input class="govuk-radios__input" type="radio" id="@petColour.Code" asp-for="PetColour" value="@petColour.Id" onclick="clearInput()">
                                         <label class="govuk-label govuk-radios__label" for="@petColour.Code">
                                             @petColour.Name
                                         </label>

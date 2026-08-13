@@ -17,7 +17,7 @@ public class PetColourViewModel : TravelDocumentFormPage
 
     public int OtherColourID { get; set; }    
 
-    public string PetTypeNameLowered => Enum.GetName(typeof(PetSpecies), PetSpecies).ToLower();
+    public string PetTypeNameLowered => Enum.GetName(PetSpecies).ToLower();
 
     public override Enums.TravelDocumentFormPageType PageType => Enums.TravelDocumentFormPageType.PetColour;
 

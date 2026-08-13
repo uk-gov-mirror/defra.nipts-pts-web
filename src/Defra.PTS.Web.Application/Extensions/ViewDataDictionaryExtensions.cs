@@ -11,14 +11,14 @@ public static class ViewDataDictionaryExtensions
     {
         ArgumentNullException.ThrowIfNull(viewData);
 
-        key ??= typeof(T).FullName!;
+        key ??= typeof(T).FullName;
         
         return !viewData.TryGetValue(key, out var result)
             ? throw new KeyNotFoundException($"ViewData does not contain a value for {JsonConvert.SerializeObject(key)}")
-            : (T)result!;
+            : (T)result;
     }
 
-    public static void Set<T>(this ViewDataDictionary viewData, T value) => Set(viewData, typeof(T).FullName!, value);
+    public static void Set<T>(this ViewDataDictionary viewData, T value) => Set(viewData, typeof(T).FullName, value);
 
     public static void Set<T>(this ViewDataDictionary viewData, string key, T value)
     {

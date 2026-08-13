@@ -11,7 +11,7 @@ namespace Defra.PTS.Web.UI.Controllers;
 public class HomeController : BaseController
 {
     private readonly IOptions<PtsSettings> _ptsSettings;
-    [BindProperty] public string EnteredPassword { get; set; } = default!;
+    [BindProperty] public string EnteredPassword { get; set; } = default;
 
     public HomeController(IOptions<PtsSettings> ptsSettings) : base()
     {

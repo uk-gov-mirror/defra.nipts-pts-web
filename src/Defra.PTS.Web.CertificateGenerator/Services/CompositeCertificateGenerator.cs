@@ -30,6 +30,6 @@ public class CompositeCertificateGenerator : ICertificateGenerator
     {
         ArgumentNullException.ThrowIfNull(certificate);
         var method = renderAsyncMethod.MakeGenericMethod(certificate.GetType());
-        return (Task<CertificateResult>)method.Invoke(this, new object[] { certificate, cancellationToken })!;
+        return (Task<CertificateResult>)method.Invoke(this, new object[] { certificate, cancellationToken });
     }
 }

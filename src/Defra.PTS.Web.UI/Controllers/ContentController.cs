@@ -30,7 +30,7 @@ public class ContentController : BaseController
     public IActionResult AccessibilityStatement() => RenderHistoryContent();
 
 
-    private IActionResult RenderHistoryContent()
+    private ViewResult RenderHistoryContent()
     {
         // shared logic
         SetBackUrl(WebAppConstants.HistoryBack);
@@ -95,7 +95,7 @@ public class ContentController : BaseController
         if (model.GaCookieAcceptYesNo == cookiesReject)
         {
             Response.Cookies.Append(cookiePolicy, cookiesReject, cookieOptions);
-            Response.Cookies.Delete(model.MeasurementId!, new CookieOptions { Path = "/", Domain = _googleTagManager.Value.Domain, Secure = true });
+            Response.Cookies.Delete(model.MeasurementId, new CookieOptions { Path = "/", Domain = _googleTagManager.Value.Domain, Secure = true });
             Response.Cookies.Delete("_ga", new CookieOptions { Path = "/", Domain = _googleTagManager.Value.Domain, Secure = true });
         }
         else

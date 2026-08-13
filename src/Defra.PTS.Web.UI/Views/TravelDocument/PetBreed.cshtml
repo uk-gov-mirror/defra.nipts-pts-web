@@ -36,6 +36,7 @@
 
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")">
 
+                <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                     <h1 class="govuk-fieldset__heading">
                         @Localizer[Model.FormTitle]
@@ -59,6 +60,7 @@
                     <select class="govuk-select govuk-!-width-full" id="BreedId" spellcheck="true" aria-describedby="BreedId__assistiveHint autocomplete-menuClasses__assistiveHint" aria-labelledby="BreedLabel" asp-for="BreedId" asp-items="ViewBag.BreedList"></select>
 
                     </div>
+                </fieldset>
             </div>
             <div class="govuk-button-group">
                 <button class="govuk-button" data-module="govuk-button" type="submit">
