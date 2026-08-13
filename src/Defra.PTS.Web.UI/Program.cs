@@ -25,7 +25,11 @@ builder.Services.AddMvc()
             opts => { opts.ResourcesPath = "Resources"; })
         .AddDataAnnotationsLocalization();
 
-builder.Configuration.ConfigureTradeAppConfiguration();
+builder.Configuration.ConfigureTradeAppConfiguration(settings =>
+{
+    settings.UseKeyVaultSecrets = true;
+    settings.RefreshKeys.Add("RemosSignUpService:Sentinel");
+});
 
 builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 #if DEBUG
