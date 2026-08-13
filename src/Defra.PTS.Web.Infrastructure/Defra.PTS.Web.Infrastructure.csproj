@@ -27,7 +27,7 @@
 		<PackageReference Include="Defra.Trade.Address.V1.ApiClient" Version="1.0.9" />
 		<PackageReference Include="Defra.Trade.Common.Config" Version="1.2.0" />
 		<PackageReference Include="Defra.Trade.Common.Security" Version="4.0.3" />
-		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.2" />
+		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.11" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.11" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
